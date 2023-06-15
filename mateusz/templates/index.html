@@ -1,0 +1,225 @@
+{% load static %}
+{% load i18n %}
+<!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+        <!-- ===== CSS ===== -->
+        <link rel="stylesheet" href="{% static 'assets/css/styles.css' %}">
+
+        <!-- ===== BOX ICONS ===== -->
+        <link href='https://cdn.jsdelivr.net/npm/boxicons@2.0.5/css/boxicons.min.css' rel='stylesheet'>
+
+        <title>MK portfolio</title>
+    </head>
+    <body>
+        <!--===== HEADER =====-->
+        <header class="l-header">
+            <nav class="nav bd-grid">
+                <div>
+                    <a href="#" class="nav__logo">{{ home.name }}</a>
+                </div>
+
+                <div class="nav__menu" id="nav-menu">
+                    <ul class="nav__list">
+                        <li class="nav__item"><a href="#home" class="nav__link active">{% trans "Home" %}</a></li>
+                        <li class="nav__item"><a href="#about" class="nav__link">{% trans "About" %}</a></li>
+                        <li class="nav__item"><a href="#skills" class="nav__link">{% trans "Skills" %}</a></li>
+                        <li class="nav__item"><a href="#portfolio" class="nav__link">{% trans "Photos" %}</a></li>
+                        <li class="nav__item"><a href="#contact" class="nav__link">{% trans "Contact" %}</a></li>
+                        <form action="{% url 'set_language' %}" method="post">{% csrf_token %}
+                            <input name="next" type="hidden" value="{{ redirect_to }}" />
+                            <select class= "list" name="language">
+                                {% get_current_language as LANGUAGE_CODE %}
+                                {% get_available_languages as LANGUAGES %}
+                                {% get_language_info_list for LANGUAGES as languages %}
+                                {% for language in languages %}
+                                <option value="{{ language.code }}" {% if language.code == LANGUAGE_CODE %} selected="selected" {% endif %}>
+                                    {{ language.name_local }} ({{ language.code }})
+                                </option>
+                                {% endfor %}
+                            </select>
+                            <input class ="language-btn" type="submit" value="{% trans "Change" %}" />
+                        </form>
+                    </ul>
+
+                </div>
+
+                <div class="nav__toggle" id="nav-toggle">
+                    <i class='bx bx-menu'></i>
+                </div>
+            </nav>
+        </header>
+
+        <main class="l-main">
+            <!--===== HOME =====-->
+            <section class="home" id="home">
+                <div class="home__container bd-grid">
+                    <h1 class="home__title"><span>{% trans "Hello!" %}</span><br></h1>
+
+                    <div class="home__scroll">
+                        <a href="#about" class="home__scroll-link"><i class='bx bx-up-arrow-alt' ></i>{% trans "Scroll down" %}</a>
+                    </div>
+
+                    <img src="{{ home.picture.url }}" alt="" class="home__img">
+                </div>
+
+            </section>
+            
+            <!--===== ABOUT =====-->
+            <section class="about section" id="about">
+                <h2 class="section-title">{% trans "About" %}</h2>
+
+                <div class="about__container bd-grid">
+                    <div class="about__img">
+                        <img src="{{ about.profile_img.url }}" alt="">
+                    </div>
+
+                    <div>
+                        <h2 class="about__subtitle">{% trans "Hi! I'm Mateusz!" %}</h2>
+                        <span class="about__profession">{% trans "IT student" %}</span>
+                        <p class="about__text">{% trans "I'm studing in Szkoła Główna Gospodarstwa Wiejskiego in Warsaw. I work in DPD company in Helpdesk as Junior IT Specialist" %}</p>
+
+                        <div class="about__social">
+                            <a href="#" class="about__social-icon"><i class='bx bxl-linkedin' ></i></a>
+                            <a href="#" class="about__social-icon"><i class='bx bxl-github' ></i></a>
+                            <a href="#" class="about__social-icon"><i class='bx bxl-dribbble' ></i></a>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!--===== SKILLS =====-->
+            <section class="skills section" id="skills">
+                <h2 class="section-title">{% trans "Skills" %}</h2>
+
+                <div class="skills__container bd-grid">
+                    <div class="skills__box">
+                        
+                        <div class="skills_box">
+
+                        <h3 class="skills__subtitle">{% trans "Skills" %}</h3>
+                        
+                                <span class="skills__name">{% trans "Jira" %}</span>
+                                <span class="skills__name">{% trans "Active Directory" %}</span>
+                                <span class="skills__name">{% trans "Django" %}</span>
+                                <span class="skills__name">{%trans "CSS" %}</span>
+                                <span class="skills__name">{%trans "HTML" %}</span>
+
+                        </div>
+                        <h3 class="skills__subtitle">{% trans "Hobby" %}</h3>
+                        
+                        <span class="skills__name">{% trans "IT" %}</span>
+                        <span class="skills__name">{% trans "Photography" %}</span>
+                        <span class="skills__name">{% trans "Music" %}</span>
+                        <span class="skills__name">{% trans "Automotive"%}</span>
+                        </div>
+                        <div class="skills__img">
+                            <img src="{% static 'assets/img/skill.jpg' %}" alt="">
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!--===== PORTFOLIO =====-->
+            <section class="portfolio section" id="portfolio">
+                <h2 class="section-title">{% trans "A few photos from journey" %}</h2>
+
+                <div class="portfolio__container bd-grid">
+                    {% for portfolio in portfolios %}
+                    
+                    <div class="portfolio__img">
+                        <img src="{{portfolio.image.url}}" alt="">
+
+                        <div class="portfolio__link">
+                            <a href="{{portfolio.link}}" class="portfolio__link-name"></a>
+                        </div>
+                    </div>
+
+                    {% endfor %}
+                </div>
+            </section>
+
+            <!--===== CONTACT =====-->
+            <section class="contact section" id="contact">
+                <h2 class="section-title">{% trans "Contact" %}</h2>
+
+                <div class="contact__container bd-grid">
+                    <div class="contact__info">
+                        <h3 class="contact__subtitle">{% trans "Email" %}</h3>
+                        <span class="contact__text">s207826@sggw.edu.pl</span>
+
+                        <h3 class="contact__subtitle">{% trans "Phone" %}</h3>
+                        <span class="contact__text">+48 570 292 235</span>
+
+                        <h3 class="contact__subtitle">{% trans "Adress" %}</h3>
+                        <span class="contact__text">{% trans "Warsaw, Poland" %}</span>
+                    </div>
+
+                    <form action="" class="contact__form">
+                        <div class="contact__inputs">
+                            <input type="text" placeholder="{% trans "Name" %}" class="contact__input">
+                            <input type="mail" placeholder="{% trans "Email" %}" class="contact__input">
+                        </div>
+
+                        <textarea name="" id="" cols="0" rows="10" class="contact__input"></textarea>
+
+                        <input type="submit" value="{% trans "Send" %}" class="contact__button">
+                    </form>
+                </div>
+            </section>
+        </main>
+
+        <!--===== FOOTER =====-->
+        <footer class="footer section">
+            <div class="footer__container bd-grid">
+                <div class="footer__data">
+                    <h2 class="footer__title">MATEUSZ KWESTARZ</h2>
+                    <p class="footer__text">{% trans "Hi there! I'm Mateusz and this is my personal page!" %}</p>
+                </div>
+
+                <div class="footer__data">
+                    <h2 class="footer__title">{% trans "Explore" %}</h2>
+                    <ul>
+                        <li><a href="#home" class="footer__link">{% trans "Home" %}</a></li>
+                        <li><a href="#about" class="footer__link">{% trans "About" %}</a></li>
+                        <li><a href="#skills" class="footer__link">{% trans "Skills" %}</a></li>
+                        <li><a href="#portfolio" class="footer__link">{% trans "Photos" %}</a></li>
+                        <li><a href="#Contact" class="footer__link">{% trans "Contact" %}</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer__data">
+                    <h2 class="footer__title">{% trans "My social media" %}</h2>
+                    <a href="#" class="footer__social"><i class='bx bxl-facebook' ></i></a>
+                    <a href="#" class="footer__social"><i class='bx bxl-instagram' ></i></a>
+                    <a href="#" class="footer__social"><i class='bx bxl-twitter' ></i></a>
+                </div>
+
+
+            </div>
+
+        </footer>
+        <!--===== COOKIES =====-->
+        <div class="cookies_dd">
+            <div class="container">
+                <div class="subcontainer">
+                    <div class="cookies">
+                        <p>{% trans "This website uses cookies to ensure you get the best experience on our website." %}
+                        <a href="">{% trans "Show more" %}</a></p>
+                        <button class="cookies-btn" id="cookies-btn">{% trans "Sure!" %}</button>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <!--===== SCROLL REVEAL =====-->
+        <script src="https://unpkg.com/scrollreveal"></script>
+
+        <!--===== MAIN JS =====-->
+        <script src="{% static 'assets/js/main.js' %}"></script>
+    </body>
+</html>
